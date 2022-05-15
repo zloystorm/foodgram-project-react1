@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+SIZE_PAGE = 6
+
 
 # Application definition
 
