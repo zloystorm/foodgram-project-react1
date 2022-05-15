@@ -1,9 +1,3 @@
-from api.filters import IngredientSearchFilter, TagFavoritShopingFilter
-from api.pagination import LimitPageNumberPagination
-from api.permissions import AdminOrReadOnly, AdminUserOrReadOnly
-from api.serializers import (FollowSerializer, IngredientSerializer,
-                             RecipeReadSerializer, RecipeWriteSerializer,
-                             ShortRecipeSerializer, TagSerializer)
 from django.contrib.auth import get_user_model
 from django.db.models import BooleanField, Exists, OuterRef, Value
 from django.http import HttpResponse
@@ -14,6 +8,13 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
+
+from api.filters import IngredientSearchFilter, TagFavoritShopingFilter
+from api.pagination import LimitPageNumberPagination
+from api.permissions import AdminOrReadOnly, AdminUserOrReadOnly
+from api.serializers import (FollowSerializer, IngredientSerializer,
+                             RecipeReadSerializer, RecipeWriteSerializer,
+                             ShortRecipeSerializer, TagSerializer)
 from users.models import Follow
 
 User = get_user_model()
@@ -44,11 +45,11 @@ class FollowViewSet(UserViewSet):
 
         if user == author:
             return Response({
-                'errors': 'Ошибка, нельзя подписываться на себя'
+                'errors': 'Ошибка подписки, нельзя подписываться на себя'
             }, status=status.HTTP_400_BAD_REQUEST)
         if Follow.objects.filter(user=user, author=author).exists():
             return Response({
-                'errors': 'Ошибка подписки, вы уже подписаны'
+                'errors': 'Ошибка подписки, вы уже подписаны на пользователя'
             }, status=status.HTTP_400_BAD_REQUEST)
 
         follow = Follow.objects.create(user=user, author=author)
@@ -63,12 +64,12 @@ class FollowViewSet(UserViewSet):
         author = get_object_or_404(User, id=id)
         if user == author:
             return Response({
-                'errors': 'Ошибка, нельзя отписываться от самого себя'
+                'errors': 'Ошибка отписки, нельзя отписываться от самого себя'
             }, status=status.HTTP_400_BAD_REQUEST)
         follow = Follow.objects.filter(user=user, author=author)
         if not follow.exists():
             return Response({
-                'errors': 'Ошибка, вы уже отписались'
+                'errors': 'Ошибка отписки, вы уже отписались'
             }, status=status.HTTP_400_BAD_REQUEST)
         follow.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -76,8 +77,8 @@ class FollowViewSet(UserViewSet):
     @action(detail=False, permission_classes=[IsAuthenticated])
     def subscriptions(self, request):
         user = request.user
-        qset = Follow.objects.filter(user=user)
-        pages = self.paginate_queryset(qset)
+        queryset = Follow.objects.filter(user=user)
+        pages = self.paginate_queryset(queryset)
         serializer = FollowSerializer(
             pages,
             many=True,
@@ -87,7 +88,7 @@ class FollowViewSet(UserViewSet):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    qset = Recipe.objects.all()
+    queryset = Recipe.objects.all()
     pagination_class = LimitPageNumberPagination
     filter_class = TagFavoritShopingFilter
     permission_classes = [AdminUserOrReadOnly]
@@ -102,10 +103,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        qset = Recipe.objects.all()
+        queryset = Recipe.objects.all()
 
         if user.is_authenticated:
-            qset = qset.annotate(
+            queryset = queryset.annotate(
                 is_favorited=Exists(Favorite.objects.filter(
                     user=user, recipe__pk=OuterRef('pk'))
                 ),
@@ -114,11 +115,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 )
             )
         else:
-            qset = qset.annotate(
+            queryset = queryset.annotate(
                 is_favorited=Value(False, output_field=BooleanField()),
                 is_in_shopping_cart=Value(False, output_field=BooleanField())
             )
-        return qset
+        return queryset
 
     @action(detail=True, methods=['post'],
             permission_classes=[IsAuthenticated])
@@ -161,28 +162,29 @@ class RecipeViewSet(viewsets.ModelViewSet):
         detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def download_shopping_cart(self, request):
         user = get_object_or_404(User, username=request.user.username)
-        s_cart = user.cart.all()
-        s_dict = {}
-        for num in s_cart:
+        shopping_cart = user.cart.all()
+        shopping_dict = {}
+        for num in shopping_cart:
             ingredients_queryset = num.recipe.ingredient.all()
             for ingredient in ingredients_queryset:
                 name = ingredient.ingredients.name
                 amount = ingredient.amount
                 measurement_unit = ingredient.ingredients.measurement_unit
-                if name not in s_dict:
-                    s_dict[name] = {
+                if name not in shopping_dict:
+                    shopping_dict[name] = {
                         'measurement_unit': measurement_unit,
                         'amount': amount}
                 else:
-                    s_dict[name]['amount'] = (
-                        s_dict[name]['amount'] + amount)
+                    shopping_dict[name]['amount'] = (
+                        shopping_dict[name]['amount'] + amount)
 
-        s_list = []
-        for index, key in enumerate(s_dict, start=1):
-            s_list.append(
-                f'{index}. {key} - {s_dict[key]["amount"]} '
-                f'{s_dict[key]["measurement_unit"]}\n')
-        filename = 's_cart.txt'
-        response = HttpResponse(s_list, content_type='text/plain')
+        shopping_list = []
+        for index, key in enumerate(shopping_dict, start=1):
+            shopping_list.append(
+                f'{index}. {key} - {shopping_dict[key]["amount"]} '
+                f'{shopping_dict[key]["measurement_unit"]}\n')
+        filename = 'shopping_cart.txt'
+        response = HttpResponse(shopping_list, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename={filename}'
         return response
+

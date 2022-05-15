@@ -1,0 +1,45 @@
+[0;4m [0m[0;4m UNIT                                                                          [0m[0;4m LOAD  [0m[0;4m ACTIVE[0m[0;4m SUB      [0m[0;4m DESCRIPTION                                                              [0m
+  [0;4mproc-sys-fs-binfmt_misc.automount                                             [0m [0;4mloaded[0m [0;4mactive[0m [0;4mwaiting  [0m [0;4mArbitrary Executable File Formats File System Automount Point            [0m
+  sys-devices-pci0000:80-0000:80:00.0-0000:81:00.0-virtio1-block-vda-vda1.device loaded active plugged   /sys/devices/pci0000:80/0000:80:00.0/0000:81:00.0/virtio1/block/vda/vda1 
+  sys-devices-pci0000:80-0000:80:00.0-0000:81:00.0-virtio1-block-vda-vda2.device loaded active plugged   /sys/devices/pci0000:80/0000:80:00.0/0000:81:00.0/virtio1/block/vda/vda2 
+  sys-devices-pci0000:80-0000:80:00.0-0000:81:00.0-virtio1-block-vda.device      loaded active plugged   /sys/devices/pci0000:80/0000:80:00.0/0000:81:00.0/virtio1/block/vda      
+  sys-devices-pci0000:89-0000:89:00.0-0000:8a:00.0-virtio0-net-eth0.device       loaded active plugged   Virtio network device                                                    
+  sys-devices-platform-serial8250-tty-ttyS10.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS10                              
+  sys-devices-platform-serial8250-tty-ttyS11.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS11                              
+  sys-devices-platform-serial8250-tty-ttyS12.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS12                              
+  sys-devices-platform-serial8250-tty-ttyS13.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS13                              
+  sys-devices-platform-serial8250-tty-ttyS14.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS14                              
+  sys-devices-platform-serial8250-tty-ttyS15.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS15                              
+  sys-devices-platform-serial8250-tty-ttyS16.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS16                              
+  sys-devices-platform-serial8250-tty-ttyS17.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS17                              
+  sys-devices-platform-serial8250-tty-ttyS18.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS18                              
+  sys-devices-platform-serial8250-tty-ttyS19.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS19                              
+  sys-devices-platform-serial8250-tty-ttyS20.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS20                              
+  sys-devices-platform-serial8250-tty-ttyS21.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS21                              
+  sys-devices-platform-serial8250-tty-ttyS22.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS22                              
+  sys-devices-platform-serial8250-tty-ttyS23.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS23                              
+  sys-devices-platform-serial8250-tty-ttyS24.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS24                              
+  sys-devices-platform-serial8250-tty-ttyS25.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS25                              
+  sys-devices-platform-serial8250-tty-ttyS26.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS26                              
+  sys-devices-platform-serial8250-tty-ttyS27.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS27                              
+  sys-devices-platform-serial8250-tty-ttyS28.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS28                              
+  sys-devices-platform-serial8250-tty-ttyS29.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS29                              
+  sys-devices-platform-serial8250-tty-ttyS30.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS30                              
+  sys-devices-platform-serial8250-tty-ttyS31.device                              loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS31                              
+  sys-devices-platform-serial8250-tty-ttyS4.device                               loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS4                               
+  sys-devices-platform-serial8250-tty-ttyS5.device                               loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS5                               
+  sys-devices-platform-serial8250-tty-ttyS6.device                               loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS6                               
+  sys-devices-platform-serial8250-tty-ttyS7.device                               loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS7                               
+  sys-devices-platform-serial8250-tty-ttyS8.device                               loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS8                               
+  sys-devices-platform-serial8250-tty-ttyS9.device                               loaded active plugged   /sys/devices/platform/serial8250/tty/ttyS9                               
+  sys-devices-pnp0-00:03-tty-ttyS0.device                                        loaded active plugged   /sys/devices/pnp0/00:03/tty/ttyS0                                        
+  sys-devices-pnp0-00:04-tty-ttyS1.device                                        loaded active plugged   /sys/devices/pnp0/00:04/tty/ttyS1                                        
+  sys-devices-pnp0-00:05-tty-ttyS2.device                                        loaded active plugged   /sys/devices/pnp0/00:05/tty/ttyS2                                        
+  sys-devices-pnp0-00:06-tty-ttyS3.device                                        loaded active plugged   /sys/devices/pnp0/00:06/tty/ttyS3                                        
+  sys-devices-virtual-misc-rfkill.device                                         loaded active plugged   /sys/devices/virtual/misc/rfkill                                         
+  sys-devices-virtual-tty-ttyprintk.device                                       loaded active plugged   /sys/devices/virtual/tty/ttyprintk                                       
+  sys-module-configfs.device                                                     loaded active plugged   /sys/module/configfs                                                     
+  sys-module-fuse.device                                                         loaded active plugged   /sys/module/fuse                                                         
+  [0;4msys-subsystem-net-devices-eth0.device                                         [0m [0;4mloaded[0m [0;4mactive[0m [0;4mplugged  [0m [0;4mVirtio network device                                                    [0m
+  -.mount                                                                        loaded active mounted   Root Mount                                                               
+  dev-hugepages.mount                                                            loaded active mounted   Huge Pages File System                             
