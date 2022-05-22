@@ -3,7 +3,6 @@ from django.db.models import BooleanField, Exists, OuterRef, Value
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
-from recipes.models import Cart, Favorite, Ingredient, Recipe, Tag
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
@@ -15,6 +14,7 @@ from api.permissions import AdminOrReadOnly, AdminUserOrReadOnly
 from api.serializers import (FollowSerializer, IngredientSerializer,
                              RecipeReadSerializer, RecipeWriteSerializer,
                              ShortRecipeSerializer, TagSerializer)
+from recipes.models import Cart, Favorite, Ingredient, Recipe, Tag
 from users.models import Follow
 
 User = get_user_model()
@@ -43,15 +43,6 @@ class FollowViewSet(UserViewSet):
         user = request.user
         author = get_object_or_404(User, id=id)
 
-        if user == author:
-            return Response({
-                'errors': 'Ошибка подписки, нельзя подписываться на себя'
-            }, status=status.HTTP_400_BAD_REQUEST)
-        if Follow.objects.filter(user=user, author=author).exists():
-            return Response({
-                'errors': 'Ошибка подписки, вы уже подписаны на пользователя'
-            }, status=status.HTTP_400_BAD_REQUEST)
-
         follow = Follow.objects.create(user=user, author=author)
         serializer = FollowSerializer(
             follow, context={'request': request}
@@ -62,15 +53,7 @@ class FollowViewSet(UserViewSet):
     def del_subscribe(self, request, id=None):
         user = request.user
         author = get_object_or_404(User, id=id)
-        if user == author:
-            return Response({
-                'errors': 'Ошибка отписки, нельзя отписываться от самого себя'
-            }, status=status.HTTP_400_BAD_REQUEST)
         follow = Follow.objects.filter(user=user, author=author)
-        if not follow.exists():
-            return Response({
-                'errors': 'Ошибка отписки, вы уже отписались'
-            }, status=status.HTTP_400_BAD_REQUEST)
         follow.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

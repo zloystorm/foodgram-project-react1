@@ -11,7 +11,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     env_file:
       - .env
-​
+
+
   backend:
     build: ../backend/
     restart: always
@@ -24,8 +25,8 @@ services:
       - db
     env_file:
       - .env
-​
-​
+
+
   frontend:
     build:
       context: ../frontend
@@ -34,7 +35,7 @@ services:
       - ../frontend/:/app/result_build/
     depends_on:
       - backend
-​
+
   nginx:
     image: nginx:1.19.3
     ports:
@@ -48,7 +49,7 @@ services:
     depends_on:
       - backend
       - frontend
-​
+
 volumes:
   postgres_data:
   static_value:

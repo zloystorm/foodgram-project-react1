@@ -2,9 +2,10 @@ from django.contrib.auth import get_user_model
 from django.db.models import F
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import Ingredient, IngredientAmount, Recipe, Tag
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+
+from recipes.models import Ingredient, IngredientAmount, Recipe, Tag
 from users.models import Follow
 
 User = get_user_model()
@@ -36,11 +37,11 @@ class CustomUserSerializer(UserSerializer):
         read_only_fields = 'is_subscribed',
 
     def get_is_subscribed(self, obj):
-        user = self.context.get('request').user
-        if user.is_anonymous:
+        request = self.context.get('request')
+        if request is None or request.user.is_anonymous:
             return False
-        return Follow.objects.filter(user=user, author=obj.id).exists()
-
+        return Follow.objects.filter(user=request.user,
+                                           author=obj).exists()
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -90,7 +91,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, data):
-        ingredients = self.initial_data.get('ingredients')
+        ingredients = data.get('ingredients')
         ingredients_set = set()
         for ingredient in ingredients:
             if type(ingredient.get('amount')) == str:
@@ -126,7 +127,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
-        tags = self.initial_data.get('tags')
+        tags = initial_data.get('tags')
         recipe = super().create(validated_data)
         return self.add_tags_ingredients(
             recipe, ingredients=ingredients, tags=tags)
@@ -135,7 +136,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         instance.ingredients.clear()
         instance.tags.clear()
         ingredients = validated_data.pop('ingredients')
-        tags = self.initial_data.get('tags')
+        tags = initial_data.get('tags')
         instance = self.add_tags_ingredients(
             instance, ingredients=ingredients, tags=tags)
         return super().update(instance, validated_data)
@@ -180,3 +181,16 @@ class FollowSerializer(serializers.ModelSerializer):
 
     def get_recipes_count(self, obj):
         return Recipe.objects.filter(author=obj.author).count()
+
+    def validate_sub(self, data):
+        user = data.get('user')
+        author = data.get('author')
+        if user == author:
+            raise serializers.ValidationError(
+                                'Нельзя подписаться на самого себя!'
+            )
+        if Subscription.objects.filter(user=user, author=author).exists():
+            raise serializers.ValidationError(
+                                'Вы уже подписаны на этого пользователя!'
+            )
+        return data

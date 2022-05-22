@@ -1,8 +1,9 @@
 from django_filters import AllValuesMultipleFilter
 from django_filters import rest_framework as filters
 from django_filters.widgets import BooleanWidget
-from recipes.models import Recipe
 from rest_framework.filters import SearchFilter
+
+from recipes.models import Recipe
 
 
 class TagFavoritShopingFilter(filters.FilterSet):
@@ -13,9 +14,9 @@ class TagFavoritShopingFilter(filters.FilterSet):
 
     class Meta:
         model = Recipe
-        fields = ["author__id", "tags__slug", "is_favorited", "is_in_shopping_cart"]
+        fields = ("author__id", "tags__slug", "is_favorited", "is_in_shopping_cart",)
 
 
 class IngredientSearchFilter(SearchFilter):
-    search_param = 'name'
+    search_param = ('name',)
 
