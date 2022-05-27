@@ -33,3 +33,7 @@ docker-compose exec backend python manage.py migrate --noinput
 docker-compose exec backend python manage.py createsuperuser
 
 Приложение можно найти по следующему ip: 84.252.138.97
+
+Логин и пароль от админки: admin:admin
+Тестовый юзер 1: TestUser1@gmail.com:strongpassword
+Тестовый юзер 2: TestUser2@gmail.com:superstrongpassword
