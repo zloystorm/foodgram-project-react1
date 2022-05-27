@@ -42,7 +42,6 @@ class FollowViewSet(UserViewSet):
     def subscribe(self, request, id=None):
         user = request.user
         author = get_object_or_404(User, id=id)
-
         follow = Follow.objects.create(user=user, author=author)
         serializer = FollowSerializer(
             follow, context={'request': request}
@@ -53,7 +52,6 @@ class FollowViewSet(UserViewSet):
     def del_subscribe(self, request, id=None):
         user = request.user
         author = get_object_or_404(User, id=id)
-        follow = Follow.objects.filter(user=user, author=author)
         follow.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -141,33 +139,25 @@ class RecipeViewSet(viewsets.ModelViewSet):
             'errors': 'Ошибка удаления рецепта из списка'
         }, status=status.HTTP_400_BAD_REQUEST)
 
+
     @action(
         detail=False, methods=['get'], permission_classes=[IsAuthenticated])
-    def download_shopping_cart(self, request):
-        user = get_object_or_404(User, username=request.user.username)
-        shopping_cart = user.cart.all()
-        shopping_dict = {}
-        for num in shopping_cart:
-            ingredients_queryset = num.recipe.ingredient.all()
-            for ingredient in ingredients_queryset:
-                name = ingredient.ingredients.name
-                amount = ingredient.amount
-                measurement_unit = ingredient.ingredients.measurement_unit
-                if name not in shopping_dict:
-                    shopping_dict[name] = {
-                        'measurement_unit': measurement_unit,
-                        'amount': amount}
-                else:
-                    shopping_dict[name]['amount'] = (
-                        shopping_dict[name]['amount'] + amount)
-
-        shopping_list = []
-        for index, key in enumerate(shopping_dict, start=1):
-            shopping_list.append(
-                f'{index}. {key} - {shopping_dict[key]["amount"]} '
-                f'{shopping_dict[key]["measurement_unit"]}\n')
-        filename = 'shopping_cart.txt'
-        response = HttpResponse(shopping_list, content_type='text/plain')
-        response['Content-Disposition'] = f'attachment; filename={filename}'
-        return response
-
+def download_shopping_cart(request):
+    name = 'name'
+    amount = 'amount'
+    measurement_unit = 'measurement_unit'
+    ingredients = request.user.shopping_chart.select_related(
+        'recipe').order_by(name).values(
+        name, measurement_unit).annotate(quantity=Sum(amount)).all()
+    for amount, ingredient in enumerate(ingredients, start=1):
+        quantity = ingredient['quantity']
+        text += (
+            f'{ingredient[name]} - '
+            f'{quantity} '
+            f'{ingredient[measurement_unit]}\n'
+        )
+    response = HttpResponse(text, content_type='text/plain')
+    filename = 'shopping_cart.txt'
+    response['Content-Disposition'] = f'attachment; filename={filename}'
+    return response
+    
