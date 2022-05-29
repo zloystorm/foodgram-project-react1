@@ -34,6 +34,4 @@ docker-compose exec backend python manage.py createsuperuser
 
 Приложение можно найти по следующему ip: 84.252.138.97
 
-Логин и пароль от админки: admin:admin
-Тестовый юзер 1: TestUser1@gmail.com:strongpassword
-Тестовый юзер 2: TestUser2@gmail.com:superstrongpassword
+Логины и пароли от админки(авто удалятся через 1 день): https://xpaste.pro/p/2oSXCp1I
