@@ -69,7 +69,6 @@ class FollowViewSet(UserViewSet):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all()
     pagination_class = LimitPageNumberPagination
     filter_class = TagFavoritShopingFilter
     permission_classes = [AdminUserOrReadOnly]
