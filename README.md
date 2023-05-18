@@ -1,12 +1,9 @@
-Автор: 
-
-    Python
-    Django
-    Docker
-    postgresql
-    nginx
-    gunicorn
-
+Python
+Django
+Docker
+postgresql
+nginx
+gunicorn
 
 cd foodgram-project-react/backend/
 docker-compose up -d
